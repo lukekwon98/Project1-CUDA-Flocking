@@ -49,7 +49,7 @@ void checkCUDAError(const char *msg, int line = -1) {
 /*! Block size used for CUDA kernel launch. */
 #define blockSize 128
 
-// LOOK-1.2 Parameters for the boids algorithm.
+// LOOK-1.1 Parameters for the boids algorithm.
 // These worked well in our reference implementation.
 #define rule1Distance 5.0f
 #define rule2Distance 3.0f
@@ -241,27 +241,80 @@ void Boids::copyBoidsToVBO(float *vbodptr_positions, float *vbodptr_velocities) 
 ******************/
 
 /**
-* LOOK-1.2 You can use this as a helper for kernUpdateVelocityBruteForce.
+* LOOK-1.1 You can use this as a helper for kernUpdateVelocityBruteForce.
 * __device__ code can be called from a __global__ context
 * Compute the new velocity on the body with index `iSelf` due to the `N` boids
 * in the `pos` and `vel` arrays.
 */
 __device__ glm::vec3 computeVelocityChange(int N, int iSelf, const glm::vec3 *pos, const glm::vec3 *vel) {
-  // Rule 1: boids fly towards their local perceived center of mass, which excludes themselves
-  // Rule 2: boids try to stay a distance d away from each other
-  // Rule 3: boids try to match the speed of surrounding boids
-  return glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 perceived_center(0.f);
+    glm::vec3 posSelf = pos[iSelf];
+    glm::vec3 c(0.f);
+    glm::vec3 perceived_velocity(0.f);
+
+    glm::vec3 v1(0.f);
+    glm::vec3 v2(0.f);
+    glm::vec3 v3(0.f);
+     
+    int num_neighbors = 0;
+    int num_neighbors3 = 0;
+    for (int i = 0; i < N; i++) {
+        glm::vec3 p = pos[i];
+
+        // Rule 1: boids fly towards their local perceived center of mass, which excludes themselves
+        if (i != iSelf && glm::distance(p, posSelf) < rule1Distance) {
+            perceived_center += p;
+            num_neighbors++;
+        }
+
+        // Rule 2: boids try to stay a distance d away from each other
+        if (i != iSelf && glm::distance(p, posSelf) < rule2Distance) {
+            c -= (p - posSelf);
+        }
+
+        // Rule 3: boids try to match the speed of surrounding boids
+        if (i != iSelf && glm::distance(p, posSelf) < rule3Distance) {
+            perceived_velocity += vel[i];
+            num_neighbors3++;
+        }
+
+    }
+
+    // Rule 1
+    if (num_neighbors != 0) {
+        perceived_center /= num_neighbors;
+        v1 = (perceived_center - posSelf) * rule1Scale;
+    }
+
+    // Rule 2
+    v2 = c * rule2Scale;
+
+    // Rule 3
+    if (num_neighbors3 != 0) {
+        perceived_velocity /= num_neighbors3;
+        v3 = perceived_velocity * rule3Scale;
+    }
+
+  return v1 + v2 + v3;
 }
 
 /**
-* TODO-1.2 implement basic flocking
+* TODO-1.1 implement basic flocking
 * For each of the `N` bodies, update its position based on its current velocity.
 */
 __global__ void kernUpdateVelocityBruteForce(int N, glm::vec3 *pos,
   glm::vec3 *vel1, glm::vec3 *vel2) {
   // Compute a new velocity based on pos and vel1
   // Clamp the speed
-  // Record the new velocity into vel2. Question: why NOT vel1?
+  // Record the new velocity into vel2. Question: why NOT vel1? -> because pingpong?
+    int i = threadIdx.x + (blockIdx.x * blockDim.x);
+    if (i >= N) {
+        return;
+    }
+
+    glm::vec3 result = vel1[i] + computeVelocityChange(N, i, pos, vel1);
+    if (glm::length(result) > maxSpeed) result = glm::normalize(result) * maxSpeed;
+    vel2[i] = result;
 }
 
 /**
@@ -364,8 +417,12 @@ __global__ void kernUpdateVelNeighborSearchCoherent(
 * Step the entire N-body simulation by `dt` seconds.
 */
 void Boids::stepSimulationNaive(float dt) {
+    int totalBlocks = (numObjects + blockSize - 1) / blockSize;
   // TODO-1.2 - use the kernels you wrote to step the simulation forward in time.
-  // TODO-1.2 ping-pong the velocity buffers
+    kernUpdateVelocityBruteForce << < totalBlocks, blockSize >> > (numObjects, dev_pos, dev_vel1, dev_vel2);
+    kernUpdatePos << <totalBlocks, blockSize >> > (numObjects, dt, dev_pos, dev_vel2);
+    // TODO-1.2 ping-pong the velocity buffers
+    std::swap(dev_vel1, dev_vel2);
 }
 
 void Boids::stepSimulationScatteredGrid(float dt) {
