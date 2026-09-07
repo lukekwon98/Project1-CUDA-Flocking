@@ -68,3 +68,6 @@ In the scattered implementation, particles belonging to the same cell are repres
 *Performance comparison using the Coherent Grid implementation with 500,000 boids and a block size of 128.*
 
 The 27 cell search performed better, reaching roughly 420 FPS, compared with about 360 FPS for the 8 cell search. Even though checking 27 neighboring cells requires more grid-cell lookups, the smaller cell width gives the grid finer spatial granularity. As a result, each cell contains fewer boids on average, so each boid performs fewer unnecessary distance comparisons against particles that are actually too far away to influence it. In this case, the savings from reducing those extra particle comparisons outweighed the additional overhead of visiting more grid cells.
+
+## Implemented Extra Credit
+Grid-Looping Optimization
