@@ -59,7 +59,7 @@ The coherent uniform grid generally provided an improvement over the scattered u
 In the scattered implementation, particles belonging to the same cell are represented by contiguous indices, but those indices still point to position and velocity data located at unrelated locations in memory. The coherent implementation additionally rearranges the actual position and velocity arrays so that particles in the same cell are contiguous. This improves spatial locality and makes neighboring GPU threads more likely to access nearby memory locations. The improvement may be relatively small, or the scattered uniform grid may perform even better at low boid counts because the coherent implementation also has the additional cost of rearranging the particle arrays every simulation step. As the workload grows, the improved memory behavior becomes more valuable.
 
 
-### 8 Cells vs 27 Cells
+### 4. 8 Cells vs 27 Cells
 
 | 8 Cells | 27 Cells |
 |---|---|
