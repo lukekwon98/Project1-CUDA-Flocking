@@ -11,7 +11,7 @@ Project 1 - Flocking**
 <img width="1280" height="720" alt="5650 CUDA Intro_ Boids  SM 8 6 NVIDIA GeForce RTX 3060" src="https://github.com/user-attachments/assets/c85d4a68-24b1-4de6-a508-8df1644386da" />
 
 ### Performance Analysis - Per Boid Count
-#### Visualization On/Off
-| <img width="600" height="371" alt="Performance Per Boid Count - Visualization On" src="https://github.com/user-attachments/assets/79a38071-a725-48e9-bb4c-ce842e3686b2" />
- | <img width="600" height="371" alt="Performance Per Boid Count - Visualization Off" src="https://github.com/user-attachments/assets/c5806fe1-bd3d-4ed0-920a-cd6027b384c5" />
- |
+
+| Boid Count - Visualization On | Boid Count - Visualization Off |
+|---|---|
+| <img width="600" alt="Performance Per Boid Count - Visualization On" src="https://github.com/user-attachments/assets/79a38071-a725-48e9-bb4c-ce842e3686b2" /> | <img width="600" alt="Performance Per Boid Count - Visualization Off" src="https://github.com/user-attachments/assets/c5806fe1-bd3d-4ed0-920a-cd6027b384c5" /> |
