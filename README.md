@@ -38,7 +38,7 @@ Increasing the number of boids generally decreased performance for all three imp
 
 ### 2. Effect of Block Count and Block Size
 
-### Per Block Size - Visualization Off
+#### Per Block Size - Visualization Off
 
 | Block Size - Visualization Off |
 |:---:|
@@ -58,3 +58,13 @@ The coherent uniform grid generally provided an improvement over the scattered u
 
 In the scattered implementation, particles belonging to the same cell are represented by contiguous indices, but those indices still point to position and velocity data located at unrelated locations in memory. The coherent implementation additionally rearranges the actual position and velocity arrays so that particles in the same cell are contiguous. This improves spatial locality and makes neighboring GPU threads more likely to access nearby memory locations. The improvement may be relatively small, or the scattered uniform grid may perform even better at low boid counts because the coherent implementation also has the additional cost of rearranging the particle arrays every simulation step. As the workload grows, the improved memory behavior becomes more valuable.
 
+
+### 8 Cells vs 27 Cells
+
+| 8 Cells | 27 Cells |
+|---|---|
+| <img width="403" height="157" alt="Screenshot 2026-09-06 235013" src="https://github.com/user-attachments/assets/aa608d25-bcf3-42ef-b8f3-98c0c3418af2" /> | <img width="397" height="156" alt="Screenshot 2026-09-06 235056" src="https://github.com/user-attachments/assets/c23a7661-f38b-46b6-8aa8-0a384bd6c7fe" /> |
+
+*Performance comparison using the Coherent Grid implementation with 500,000 boids and a block size of 128.*
+
+The 27 cell search performed better, reaching roughly 420 FPS, compared with about 360 FPS for the 8 cell search. Even though checking 27 neighboring cells requires more grid-cell lookups, the smaller cell width gives the grid finer spatial granularity. As a result, each cell contains fewer boids on average, so each boid performs fewer unnecessary distance comparisons against particles that are actually too far away to influence it. In this case, the savings from reducing those extra particle comparisons outweighed the additional overhead of visiting more grid cells.
