@@ -13,13 +13,12 @@ Project 1 - Flocking**
 
 <img width="1276" height="720" alt="100,000 Boids - Coherent Grid - Block Size 128" src="https://github.com/user-attachments/assets/cbab3e6c-2302-44f6-9a08-6b78bf8217e3" />
 
-*100,000 boids using the coherent uniform grid implementation with a block size of 128.*
 
 ### GIF
 
 <img width="1280" height="720" alt="100,000 Boids - Coherent Grid - Block Size 128" src="https://github.com/user-attachments/assets/c85d4a68-24b1-4de6-a508-8df1644386da" />
 
-*Real-time flocking simulation with 100,000 boids using the coherent uniform grid implementation and a block size of 128.*
+
 ## Performance Analysis
 ### Per Boid Count - Visualization On/Off
 
