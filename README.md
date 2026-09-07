@@ -20,12 +20,7 @@ Project 1 - Flocking**
 
 
 ## Performance Analysis
-### Per Boid Count - Visualization On/Off
 
-| Boid Count - Visualization On | Boid Count - Visualization Off |
-|---|---|
-| <img width="600" alt="Performance Per Boid Count - Visualization On" src="https://github.com/user-attachments/assets/79a38071-a725-48e9-bb4c-ce842e3686b2" /> | <img width="600" alt="Performance Per Boid Count - Visualization Off" src="https://github.com/user-attachments/assets/c5806fe1-bd3d-4ed0-920a-cd6027b384c5" /> |
-
-### Per Block Size<p align="center">
-  <img width="400" alt="Performance Per Block Size - Visualization Off" src="https://github.com/user-attachments/assets/cbf9c46c-e526-4410-9232-630774515f9d" />
-</p>
+| Boid Count - Visualization On | Boid Count - Visualization Off | Block Size - Visualization Off |
+|---|---|---|
+| <img alt="Performance Per Boid Count - Visualization On" src="https://github.com/user-attachments/assets/79a38071-a725-48e9-bb4c-ce842e3686b2" /> | <img alt="Performance Per Boid Count - Visualization Off" src="https://github.com/user-attachments/assets/c5806fe1-bd3d-4ed0-920a-cd6027b384c5" /> | <img alt="Performance Per Block Size - Visualization Off" src="https://github.com/user-attachments/assets/cbf9c46c-e526-4410-9232-630774515f9d" /> |
