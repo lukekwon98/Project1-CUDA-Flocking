@@ -32,4 +32,3 @@ Project 1 - Flocking**
 | Block Size - Visualization Off |
 |:---:|
 | <img width="500" alt="Performance Per Block Size - Visualization Off" src="https://github.com/user-attachments/assets/cbf9c46c-e526-4410-9232-630774515f9d" /> |
-Why this works
